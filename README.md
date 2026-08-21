@@ -115,6 +115,39 @@ The water-level information is displayed on the **Wokwi Serial Monitor** using U
 ## Program
 
 
+```
+/* Initially turn OFF pump */
+HAL_GPIO_WritePin(PUMP_RELAY_PORT,
+                  PUMP_RELAY_PIN,
+                  GPIO_PIN_RESET);
+
+while (1)
+{
+    /* Check HIGH level */
+    if (HAL_GPIO_ReadPin(HIGH_LEVEL_PORT, HIGH_LEVEL_PIN)
+        == GPIO_PIN_SET)
+    {
+        /* Tank is full → Pump OFF */
+        HAL_GPIO_WritePin(PUMP_RELAY_PORT,
+                          PUMP_RELAY_PIN,
+                          GPIO_PIN_RESET);
+    }
+
+    /* Check LOW level */
+    else if (HAL_GPIO_ReadPin(LOW_LEVEL_PORT, LOW_LEVEL_PIN)
+             == GPIO_PIN_RESET)
+    {
+        /* Water level is low → Pump ON */
+        HAL_GPIO_WritePin(PUMP_RELAY_PORT,
+                          PUMP_RELAY_PIN,
+                          GPIO_PIN_SET);
+    }
+
+    HAL_Delay(100);
+}
+
+```
+
 ## Circuit Connections
 
 ### Potentiometer
@@ -176,6 +209,9 @@ GND  ---| GND                |
 ---
 
 ## Expected Output
+
+<img width="1035" height="806" alt="WhatsApp Image 2026-08-21 at 2 52 07 PM" src="https://github.com/user-attachments/assets/2cd5d9d7-a9cf-4014-b747-40aed4107dc5" />
+
 
 ### Low Water Level
 
